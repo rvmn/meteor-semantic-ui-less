@@ -21,3 +21,5 @@ Template.hello.rendered = function(){
 	$('.ui.dropdown').dropdown();
 }
 ```
+###Examples
+See the examples folder
