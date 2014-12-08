@@ -5,90 +5,59 @@ Package.describe({
   git: "https://github.com/nooitaf/meteor-semantic-ui-less.git"
 });
 
+// TODO: make this less ugly in future
+function getFilesFromFolder(packageName, folder){
+  // local imports
+  var _ = Npm.require("underscore");
+  var fs = Npm.require("fs");
+  var path = Npm.require("path");
+  // helper function, walks recursively inside nested folders and return absolute filenames
+  function walk(folder){
+    var filenames = [];
+    // get relative filenames from folder
+    var folderContent = fs.readdirSync(folder);
+    // iterate over the folder content to handle nested folders
+    _.each(folderContent, function(filename) {
+      // build absolute filename
+      var absoluteFilename = path.join(folder, filename);
+      // get file stats
+      var stat = fs.statSync(absoluteFilename);
+      if(stat.isDirectory()){
+        // directory case => add filenames fetched from recursive call
+        filenames = filenames.concat(walk(absoluteFilename));
+      }
+      else{
+        // file case => simply add it
+        filenames.push(absoluteFilename);
+      }
+    });
+    return filenames;
+  }
+  // save current working directory (something like "/home/user/projects/my-project")
+  var cwd = process.cwd();
+
+  var isRunningFromApp = fs.existsSync(path.resolve("packages"));
+  var packagePath = isRunningFromApp ? path.resolve("packages", packageName) : "";
+
+  packagePath = path.resolve(packagePath);
+  // chdir to our package directory
+  process.chdir(path.join(packagePath));
+  // launch initial walk
+  var result = walk(folder);
+  // restore previous cwd
+  process.chdir(cwd);
+  return result;
+}
+
+
 Package.on_use(function (api) {
 
   api.versionsFrom('METEOR@0.9.1');
   api.use(['jquery','less'],'client');
-
+  
   var path = Npm.require('path');
-  var assetPath = path.join('lib/semantic-ui/build/less/');
-  var assetFiles = [
-    assetPath + 'collections/breadcrumb.less',
-    assetPath + 'collections/form.less',
-    assetPath + 'collections/grid.less',
-    assetPath + 'collections/menu.less',
-    assetPath + 'collections/message.less',
-    assetPath + 'collections/table.less',
-    assetPath + 'elements/basic.icon.less',
-    assetPath + 'elements/button.less',
-    assetPath + 'elements/divider.less',
-    assetPath + 'elements/header.less',
-    assetPath + 'elements/icon.less',
-    assetPath + 'elements/image.less',
-    assetPath + 'elements/input.less',
-    assetPath + 'elements/label.less',
-    assetPath + 'elements/loader.less',
-    assetPath + 'elements/progress.less',
-    assetPath + 'elements/reveal.less',
-    assetPath + 'elements/segment.less',
-    assetPath + 'elements/step.less',
-    assetPath + 'fonts/basic.icons.eot',
-    assetPath + 'fonts/basic.icons.svg',
-    assetPath + 'fonts/basic.icons.ttf',
-    assetPath + 'fonts/basic.icons.woff',
-    assetPath + 'fonts/icons.eot',
-    assetPath + 'fonts/icons.otf',
-    assetPath + 'fonts/icons.svg',
-    assetPath + 'fonts/icons.ttf',
-    assetPath + 'fonts/icons.woff',
-    assetPath + 'images/loader-large-inverted.gif',
-    assetPath + 'images/loader-large.gif',
-    assetPath + 'images/loader-medium-inverted.gif',
-    assetPath + 'images/loader-medium.gif',
-    assetPath + 'images/loader-mini-inverted.gif',
-    assetPath + 'images/loader-mini.gif',
-    assetPath + 'images/loader-small-inverted.gif',
-    assetPath + 'images/loader-small.gif',
-    assetPath + 'modules/accordion.js',
-    assetPath + 'modules/accordion.less',
-    assetPath + 'modules/behavior/api.js',
-    assetPath + 'modules/behavior/colorize.js',
-    assetPath + 'modules/behavior/form.js',
-    assetPath + 'modules/behavior/state.js',
-    assetPath + 'modules/chatroom.js',
-    assetPath + 'modules/chatroom.less',
-    assetPath + 'modules/checkbox.js',
-    assetPath + 'modules/checkbox.less',
-    assetPath + 'modules/dimmer.js',
-    assetPath + 'modules/dimmer.less',
-    assetPath + 'modules/dropdown.js',
-    assetPath + 'modules/dropdown.less',
-    assetPath + 'modules/modal.js',
-    assetPath + 'modules/modal.less',
-    assetPath + 'modules/nag.js',
-    assetPath + 'modules/nag.less',
-    assetPath + 'modules/popup.js',
-    assetPath + 'modules/popup.less',
-    assetPath + 'modules/rating.js',
-    assetPath + 'modules/rating.less',
-    assetPath + 'modules/search.js',
-    assetPath + 'modules/search.less',
-    assetPath + 'modules/shape.js',
-    assetPath + 'modules/shape.less',
-    assetPath + 'modules/sidebar.js',
-    assetPath + 'modules/sidebar.less',
-    assetPath + 'modules/tab.js',
-    assetPath + 'modules/tab.less',
-    assetPath + 'modules/transition.js',
-    assetPath + 'modules/transition.less',
-    assetPath + 'modules/video.js',
-    assetPath + 'modules/video.less',
-    assetPath + 'views/comment.less',
-    assetPath + 'views/feed.less',
-    assetPath + 'views/item.less',
-    assetPath + 'views/list.less',
-    assetPath + 'views/statistic.less'
-  ];
+  
+  var assetFiles = getFilesFromFolder("rvmn:meteor-semantic-less", "Semantic-UI/src/");
   api.add_files(assetFiles, 'client');
 
 });
