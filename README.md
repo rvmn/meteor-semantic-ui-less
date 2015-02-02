@@ -1,7 +1,7 @@
 ##Semantic UI package for meteor using less
 
 ###What is this?
-This is a wrapper for Semantic UI for Meteor using less. It links to the official repo, so is always updated.
+This is a wrapper for Semantic UI for Meteor using less. It links to the official repo, so it's always updated to the latest fresh release.
 
 ###What is Semantic UI?
 Semantic is a set of specifications for sharing UI elements between developers. Semantic is also a UI library to make front end development simpler and easier to learn. 
@@ -10,7 +10,7 @@ Semantic is a set of specifications for sharing UI elements between developers. 
 [https://github.com/Semantic-Org/Semantic-UI](https://github.com/Semantic-Org/Semantic-UI)
 
 ###Install
-`meteor add robertovm:semantic-ui-less`
+`meteor add rvmn:semantic-ui-less`
 
 ####issues:
 Javascript elements like dropdowns are not active by default. 
