@@ -1,8 +1,8 @@
 Package.describe({
   summary: "Semantic UI packaged for Meteor using less",
-  version: "0.19.3",
-  name: "nooitaf:semantic-ui-less",
-  git: "https://github.com/nooitaf/meteor-semantic-ui-less.git"
+  version: "latest",
+  name: "rvmn:semantic-ui-less",
+  git: "https://github.com/rvmn/meteor-semantic-ui-less.git"
 });
 
 // TODO: make this less ugly in future
