@@ -57,7 +57,7 @@ Package.on_use(function (api) {
   
   var path = Npm.require('path');
   
-  var assetFiles = getFilesFromFolder("rvmn:meteor-semantic-less", "Semantic-UI/src/");
+  var assetFiles = getFilesFromFolder("rvmn:meteor-semantic-ui-less", "Semantic-UI/src/");
   api.add_files(assetFiles, 'client');
 
 });
